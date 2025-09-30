@@ -1,4 +1,4 @@
-version: "3.8"
+# Test auto-deploy at 30-09-2025
 services:
   wireguard:
     image: linuxserver/wireguard
@@ -14,3 +14,23 @@ services:
       - PGID=1000
       - TZ=Asia/Jakarta
     restart: unless-stopped
+
+  jenkins:
+    image: jenkins-with-docker
+    container_name: jenkins
+    restart: unless-stopped
+    ports:
+      - "8080:8080"      # Jenkins UI
+      - "50000:50000"    # Jenkins agent port
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - ./config:/wireguard-config:ro  # Mount wireguard config (read-only) supaya Jenkins bisa akses
+      - /var/run/docker.sock:/var/run/docker.sock  # Supaya Jenkins bisa kontrol Docker
+    environment:
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false
+    # Optional: kalau perlu akses sebagai root untuk deploy
+    user: root
+
+volumes:
+  jenkins_home:
+    driver: local
