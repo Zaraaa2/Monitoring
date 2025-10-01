@@ -1,0 +1,44 @@
+version: '3.9'
+
+services:
+  db:
+    image: mariadb:10.5
+    container_name: radius-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: radius
+      MYSQL_USER: radius
+      MYSQL_PASSWORD: radiuspassword
+    volumes:
+      - db_data:/var/lib/mysql
+
+  freeradius:
+    image: freeradius/freeradius-server:latest
+    container_name: freeradius
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "1812:1812/udp"
+      - "1813:1813/udp"
+    volumes:
+      - ./freeradius/mods-config/sql:/etc/freeradius/3.0/mods-config/sql
+      - ./freeradius/mods-enabled/sql:/etc/freeradius/3.0/mods-enabled/sql
+      - ./freeradius/sites-enabled:/etc/freeradius/3.0/sites-enabled
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    container_name: daloradius
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8080:80"
+    volumes:
+      - ./daloradius:/var/www/html
+
+volumes:
+  db_data:
