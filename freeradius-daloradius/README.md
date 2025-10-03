@@ -60,3 +60,4 @@ Buka browser dan akses:
 
 Login dengan kredensial default: - **Username:** `administrator`\
 - **Password:** `radius`
+PASTIKAN PORT 1812 & 1813/UDP TERBUKA UNTUK MENGHINDARI ERROR SAAT MASUK WEB
