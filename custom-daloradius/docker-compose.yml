@@ -1,0 +1,84 @@
+version: '3.9'
+
+services:
+  db:
+    image: mariadb:10.5
+    container_name: radius-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: radius
+      MYSQL_USER: radius
+      MYSQL_PASSWORD: radiuspassword
+    volumes:
+      - db_data:/var/lib/mysql
+
+  freeradius:
+    image: freeradius/freeradius-server:latest
+    container_name: freeradius
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "1812:1812/udp"
+      - "1813:1813/udp"
+    volumes:
+      - ./freeradius/mods-config/sql:/etc/freeradius/3.0/mods-config/sql
+      - ./freeradius/mods-enabled/sql:/etc/freeradius/3.0/mods-enabled/sql
+      - ./freeradius/sites-enabled:/etc/freeradius/3.0/sites-enabled
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    container_name: daloradius-web
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./daloradius:/var/www/html
+    depends_on:
+      - db
+
+  custom-dalo-web:
+    build: ./web
+    container_name: custom_daloradius_web
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      - DB_HOST=db
+      - DB_USER=radius
+      - DB_PASS=radiuspassword
+      - DB_NAME=radius
+    depends_on:
+      - db
+    networks:
+      - radius_net
+
+  custom-dalo-monitor:
+    build: ./monitor
+    container_name: custom_daloradius_monitor
+    restart: unless-stopped
+    environment:
+      - DB_HOST=db
+      - DB_USER=radius
+      - DB_PASS=radiuspassword
+      - DB_NAME=radius
+      - CHECK_INTERVAL=30
+      - DEBOUNCE_COUNT=2
+      - SNMP_COMMUNITY=public
+      - SNMP_VERSION=2c
+      - TG_BOT_TOKEN=
+      - TG_CHAT_ID=
+    depends_on:
+      - db
+    networks:
+      - radius_net
+
+networks:
+  radius_net:
+    driver: bridge
+
+volumes:
+  db_data:
