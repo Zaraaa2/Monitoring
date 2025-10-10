@@ -1,10 +1,10 @@
-# 🚀 Jenkins + WireGuard Deployment
+#  Jenkins + WireGuard Deployment
 
 This project integrates **Jenkins** into a VPN Gateway (WireGuard) server to enable a **CI/CD pipeline** connected with a **GitHub Webhook**.
 
 ---
 
-## 📦 Server Preparation
+##  Server Preparation
 
 1. Ensure that **Docker** & **Docker Compose** are installed on the server.
 
@@ -19,7 +19,7 @@ git clone https://github.com/<username>/<repo-name>.git
 cd <repo-name>
 ```
 
-## ⚙️ Deployment
+##  Deployment
 
 Run the following command to build and start the containers:
 
@@ -28,14 +28,14 @@ docker compose up --build -d
 ```
 
 Jenkins UI will be available at:  
-👉 http://<PUBLIC_IP>:8080
+ http://<PUBLIC_IP>:8080
 
 WireGuard will run according to the configuration in the `config/` folder.
 
-## 🔑 Initial Jenkins Setup
+##  Initial Jenkins Setup
 
 Access Jenkins via your browser:  
-👉 http://<PUBLIC_IP>:8080
+ http://<PUBLIC_IP>:8080
 
 Get the initial admin password:
 
@@ -53,7 +53,7 @@ Login using that password.
 * Docker Pipeline  
 * Blue Ocean (optional, for a modern UI)
 
-## ⚙️ Jenkins Web Configuration
+##  Jenkins Web Configuration
 
 ### Add GitHub Credentials
 
@@ -87,7 +87,7 @@ Navigate to: Manage Jenkins → Configure System → GitHub Servers
 * Check: **GitHub hook trigger for GITScm polling**  
 * Save
 
-## 🔗 GitHub Configuration
+##  GitHub Configuration
 
 * Go to your GitHub repository ➝ **Settings → Webhooks → Add webhook**
   * Payload URL: http://<PUBLIC_IP>:8080/github-webhook/  
@@ -96,17 +96,17 @@ Navigate to: Manage Jenkins → Configure System → GitHub Servers
 * Save, then click **Redeliver** to test  
 * Ensure delivery status = **200 OK**
 
-## 🔄 Update Repository
+##  Update Repository
 
 * Go to Jenkins UI → Select your job → Configure → Update Repository URL → Save
 
-## 🛑 Stop Jenkins & WireGuard
+##  Stop Jenkins & WireGuard
 
 ```bash
 docker compose down
 ```
 
-## 📖 Notes
+##  Notes
 
 * Make sure ports **8080** and **50000** are open in your AWS Security Group.  
 * Use your AWS Public IP as the webhook URL.  
