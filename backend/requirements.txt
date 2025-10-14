@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+pymysql
+librouteros
+python-dotenv
+pysnmp
