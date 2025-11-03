@@ -1,0 +1,10 @@
+# Folders to ignore
+/node_modules
+/vendor
+/storage/*.key
+.git
+.idea
+.vscode
+
+# Files to ignore
+.

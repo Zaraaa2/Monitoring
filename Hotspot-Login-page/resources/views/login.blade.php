@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotspot Login SEAMOLEC</title>
+
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="icon" href="{{ asset('assets/images/favicon.ico') }}" type="image/x-icon">
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-3 sm:p-4 relative overflow-hidden">
+    
+    <!-- Background Image with Blur -->
+    <div class="absolute inset-0 z-0">
+        <img src="{{ asset('assets/images/office-bg.jpg') }}" alt="Office" class="w-full h-full object-cover blur-sm">
+        <!-- Dark overlay -->
+        <div class="absolute inset-0 bg-black/50"></div>
+    </div>
+    
+    <!-- Login Container - RESPONSIVE -->
+    <div class="bg-white rounded-xl sm:rounded-2xl shadow-2xl w-full max-w-md p-4 sm:p-6 md:p-8 relative z-10">
+        
+        <!-- Logo/Header - RESPONSIVE -->
+        <div class="text-center mb-4 sm:mb-6 md:mb-8">
+            <img 
+                src="{{ asset('assets/images/SEAMOLEC-logo.png') }}" 
+                alt="Logo" 
+                class="w-14 h-14 sm:w-20 sm:h-20 md:w-24 md:h-24 mx-auto mb-2 sm:mb-3 md:mb-4 object-contain"
+            >
+            <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-1">
+                Hotspot Login
+            </h1>
+            <p class="text-xs sm:text-sm md:text-base text-gray-600">
+                Please log in for internet access
+            </p>
+        </div>
+        
+        <!-- Error Message from Laravel Session -->
+        @if(session('error'))
+        <div class="bg-red-100 border border-red-400 text-red-700 px-3 py-2 sm:px-4 sm:py-3 rounded-lg mb-4 text-xs sm:text-sm">
+            {{ session('error') }}
+        </div>
+        @endif
+
+        @if(session('success'))
+        <div class="bg-green-100 border border-green-400 text-green-700 px-3 py-2 sm:px-4 sm:py-3 rounded-lg mb-4 text-xs sm:text-sm">
+            {{ session('success') }}
+        </div>
+        @endif
+        
+        <!-- Login Form - Laravel -->
+        <form method="POST" action="{{ route('login.submit') }}" class="space-y-3 sm:space-y-4">
+            @csrf
+            
+            <!-- Hidden fields untuk Mikrotik (nanti production) -->
+            <input type="hidden" name="mac" value="{{ request('mac', 'AA:BB:CC:DD:EE:FF') }}">
+            <input type="hidden" name="ip" value="{{ request('ip', request()->ip()) }}">
+            <input type="hidden" name="link_orig" value="{{ request('link-orig', 'http://google.com') }}">
+            
+            <!-- Username -->
+            <div>
+                <label class="block text-gray-700 font-semibold mb-1 sm:mb-2 text-xs sm:text-sm md:text-base">
+                    Username
+                </label>
+                <input 
+                    type="text"
+                    name="username"
+                    value="{{ old('username') }}"
+                    placeholder="Enter username"
+                    class="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
+                    required
+                    autofocus
+                >
+                @error('username')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+            
+            <!-- Password -->
+            <div>
+                <label class="block text-gray-700 font-semibold mb-1 sm:mb-2 text-xs sm:text-sm md:text-base">
+                    Password
+                </label>
+                <input 
+                    type="password"
+                    name="password"
+                    placeholder="Enter password"
+                    class="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition"
+                    required
+                >
+                @error('password')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+            
+            <!-- Login Button -->
+            <button 
+                type="submit"
+                class="w-full py-2.5 sm:py-3 text-sm sm:text-base rounded-lg font-semibold text-white transition duration-300 bg-red-500 hover:bg-red-600"
+            >
+                Login
+            </button>
+            
+        </form>
+        
+        <!-- Footer -->
+        <div class="mt-3 sm:mt-4 md:mt-6 text-center text-xs sm:text-sm text-gray-600">
+            <p>Contact IT Support if there are any problems</p>
+        </div>
+        
+    </div>
+
+</body>
+
+</html>

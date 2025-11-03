@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connection Status</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="{{ asset('assets/images/favicon.ico') }}" type="image/x-icon">
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-3 sm:p-4 relative overflow-hidden">
+    
+    <!-- Background Image with Blur -->
+    <div class="absolute inset-0 z-0">
+        <img src="{{ asset('assets/images/office-bg.jpg') }}" alt="Office" class="w-full h-full object-cover blur-sm">
+        <!-- Dark overlay -->
+        <div class="absolute inset-0 bg-black/50"></div>
+    </div>
+
+    <!-- Konten utama -->
+    <div class="relative z-10 text-center bg-white backdrop-blur-md p-6 rounded-xl shadow-lg">
+        <!-- Header -->
+        <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-800">Connection Active</h1>
+            <p class="text-gray-600 mt-2">You are connected to the internet</p>
+        </div>
+
+        @if(session('info'))
+        <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded-lg mb-4 text-sm">
+            {{ session('info') }}
+        </div>
+        @endif
+
+        <!-- Info -->
+        <div class="space-y-3 mb-6">
+            <div class="flex justify-between p-3 bg-gray-50 rounded-lg">
+                <span class="text-gray-600">Username:</span>
+                <span class="font-semibold text-gray-800">{{ session('username', 'Guest') }}</span>
+            </div>
+            <div class="flex justify-between p-3 bg-gray-50 rounded-lg">
+                <span class="text-gray-600">IP Address:</span>
+                <span class="font-semibold text-gray-800">{{ request()->ip() }}</span>
+            </div>
+            <div class="flex justify-between p-3 bg-gray-50 rounded-lg">
+                <span class="text-gray-600">Status:</span>
+                <span class="font-semibold text-green-600">Connected</span>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="space-y-2">
+            <a href="http://google.com"
+                class="block w-full bg-blue-500 hover:bg-blue-600 text-white text-center py-3 rounded-lg font-semibold transition duration-300">
+                Continue Browsing
+            </a>
+            <a href="{{ route('logout') }}"
+                class="block w-full bg-red-500 hover:bg-red-600 text-white text-center py-3 rounded-lg font-semibold transition duration-300">
+                Logout
+            </a>
+        </div>
+    </div>
+</body>
