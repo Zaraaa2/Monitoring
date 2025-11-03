@@ -31,12 +31,6 @@
             <p class="text-gray-600 mt-2">You are connected to the internet</p>
         </div>
 
-        @if(session('info'))
-        <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded-lg mb-4 text-sm">
-            {{ session('info') }}
-        </div>
-        @endif
-
         <!-- Info -->
         <div class="space-y-3 mb-6">
             <div class="flex justify-between p-3 bg-gray-50 rounded-lg">
