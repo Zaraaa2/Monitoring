@@ -108,7 +108,7 @@ docker compose down
 
 ##  Notes
 
-* Make sure ports **8080** and **50000** are open in your AWS Security Group.  
+* Make sure ports **8080** , **51820** and **50000** are open in your AWS Security Group.  
 * Use your AWS Public IP as the webhook URL.  
 * The repository must include a `Jenkinsfile`.  
 * Jenkins plugin documentation: [Jenkins Plugins Index](https://plugins.jenkins.io/)
